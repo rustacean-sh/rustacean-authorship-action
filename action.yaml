@@ -1,0 +1,27 @@
+name: rustacean-authorship-action
+description: GitHub Action to Verify PR Authorship
+author: Esteban Borai <estebanborai@gmail.com> (https://estebanborai.com)
+
+inputs:
+  pr_author:
+    required: true
+    description: PR Author
+  token:
+    required: true
+    description: GitHub Token Used to interact with the GitHub API
+    default: ${{ github.token }}
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      name: Download Action
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+      run: |
+        gh release download --repo rustacean-sh/rustacean-authorship-action --pattern 'rustacean-authorship-action-${{ runner.os }}'
+
+    - id: run
+      shell: bash
+      name: Run Action
+      run: ./rustacean-authorship-action-${{ runner.os }} "${{ inputs.pr_author }}"
