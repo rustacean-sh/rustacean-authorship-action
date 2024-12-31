@@ -11,24 +11,6 @@ inputs:
     description: GitHub Token Used to interact with the GitHub API
     default: ${{ github.token }}
 
-on:
-  pull_request:
-    branches: [ "main" ]
-#  Here the action will get the PR number
-      - name: Get Pull Request Number
-        id: pr
-        run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-# Here the action will get the diff
-      - name: Get Pull Request Diffing Files
-        id: diff
-        run: gh pr diff --name-only
-
-        # Can I get the diff in an environment variable?
-
-    
-
 runs:
   using: composite
   steps:
@@ -47,6 +29,3 @@ runs:
       run: |
         chmod +x ./rustacean-authorship-action-ubuntu-latest
         ./rustacean-authorship-action-ubuntu-latest "${{ inputs.pr_author }}"
-
-  
-    

@@ -1,0 +1,29 @@
+on:
+  pull_request:
+    # branches: [ "main" ]
+    #  Here the action will get the PR number
+    - name: Get Pull Request Number
+      id: pr
+      run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+      env:
+        PR_NUMBER: ${{ github.event.number }}
+    # Here the action will get the diff
+    - name: Get Pull Request Diffing Files
+      id: diff
+      run: gh pr diff --name-only
+      # run: gh pr diff PR_NUMBER
+
+      # Can I get the diff in an environment variable?
+
+      # jobs:
+      #  uses: actions/checkout@v4
+      # checkout code from repo
+      # run cargo run ${{ github.actor }}
+      # The name of your branch is ${{ github.ref }}
+
+      jobs:
+        success:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout Source
+            uses: actions/checkout@v4
