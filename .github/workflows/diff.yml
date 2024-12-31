@@ -1,7 +1,23 @@
 on:
   pull_request:
     # branches: [ "main" ]
-    #  Here the action will get the PR number
+    
+      jobs:
+        setup:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout Source
+            uses: actions/checkout@v4
+
+           
+          - name: Get Pull Request Number
+            id: pr
+            run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+            env:
+              PR_NUMBER: ${{ github.event.number }}
+
+
+#  Here the action will get the PR number
     - name: Get Pull Request Number
       id: pr
       run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
@@ -20,10 +36,3 @@ on:
       # checkout code from repo
       # run cargo run ${{ github.actor }}
       # The name of your branch is ${{ github.ref }}
-
-      jobs:
-        success:
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout Source
-            uses: actions/checkout@v4
