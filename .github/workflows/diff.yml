@@ -1,6 +1,7 @@
 on:
   pull_request:
-    # branches: [ "main" ]
+    types: [opened, reopened]
+  
     
       jobs:
         setup:
@@ -16,17 +17,21 @@ on:
             env:
               PR_NUMBER: ${{ github.event.number }}
 
+          - name: Get Pull Request Diffing Files
+            id: diff
+            run: gh pr diff --name-only
+
 
 #  Here the action will get the PR number
-    - name: Get Pull Request Number
-      id: pr
-      run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
-      env:
-        PR_NUMBER: ${{ github.event.number }}
+    # - name: Get Pull Request Number
+    #   id: pr
+    #   run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+    #   env:
+    #     PR_NUMBER: ${{ github.event.number }}
     # Here the action will get the diff
-    - name: Get Pull Request Diffing Files
-      id: diff
-      run: gh pr diff --name-only
+    # - name: Get Pull Request Diffing Files
+    #   id: diff
+    #   run: gh pr diff --name-only
       # run: gh pr diff PR_NUMBER
 
       # Can I get the diff in an environment variable?
@@ -36,3 +41,18 @@ on:
       # checkout code from repo
       # run cargo run ${{ github.actor }}
       # The name of your branch is ${{ github.ref }}
+
+
+      # check specific files:https://stackoverflow.com/questions/63822219/how-to-run-github-actions-workflow-only-if-the-pushed-files-are-in-a-specific-fo
+
+
+#       on:
+#   pull_request:
+#     types:
+#       - opened
+# jobs:
+#   run_if:
+#     if: startsWith(github.head_ref, 'releases/')
+#     runs-on: ubuntu-latest
+#     steps:
+#       - run: echo "The head of this PR starts with 'releases/'"
