@@ -11,15 +11,15 @@ on:
             uses: actions/checkout@v4
 
            
-          - name: Get Pull Request Number
+          - name: call Github  action
             id: pr
-            run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+            run: cargo run ${{ github.actor }} ${{ github.event.number }} ${{ secrets.GITHUB_TOKEN }}
             env:
               PR_NUMBER: ${{ github.event.number }}
 
-          - name: Get Pull Request Diffing Files
-            id: diff
-            run: gh pr diff --name-only
+          # - name: Get Pull Request Diffing Files
+          #   id: diff
+          #   run: gh pr diff --name-only
 
 
 #  Here the action will get the PR number
@@ -56,3 +56,6 @@ on:
 #     runs-on: ubuntu-latest
 #     steps:
 #       - run: echo "The head of this PR starts with 'releases/'"
+# how to get the GH token
+# env:
+#           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
