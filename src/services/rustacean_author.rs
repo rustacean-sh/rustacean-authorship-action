@@ -44,7 +44,6 @@ impl RustaceanMember {
         if pr_files.len() == 2
             && pr_files[1].filename == format!("data/rustaceans/{}.toml", self.name)
         {
-            println!("Files are: {:?}", pr_files[1].filename);
             Ok(true)
         } else {
             println!(
