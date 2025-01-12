@@ -1,0 +1,32 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  checks:
+    name: Integrity Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build Check
+        run: cargo b
+
+      - name: Format Check
+        run: cargo fmt -- --check
+
+      - name: Clippy Check
+        run: cargo clippy -- -D warnings
+
+      - name: Test Check
+        run: cargo t
