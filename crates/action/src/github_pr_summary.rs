@@ -5,7 +5,9 @@ use url::Url;
 
 pub type PrNumber = i32;
 
-const GITHUB_BASE_URL: &str = "https://api.github.com/repos/rustacean-sh/rustacean.sh";
+/// URL used to reach GitHub's API.
+/// E.g. "https://api.github.com/repos/rustacean-sh/rustacean.sh"
+const GITHUB_BASE_URL: &str = env!("GITHUB_BASE_URL");
 
 #[derive(Deserialize, Debug)]
 struct GitHubPrUser {

@@ -3,10 +3,6 @@ description: GitHub Action to Verify PR Authorship
 author: Esteban Borai <estebanborai@gmail.com> (https://estebanborai.com)
 
 inputs:
-  pr_author:
-    required: true
-    description: PR Author
-
   token:
     required: true
     description: GitHub Token Used to interact with the GitHub API
@@ -35,10 +31,22 @@ runs:
 
     - id: run
       shell: bash
+      name: (Test Only) Run Action with Special Envs
+      if: ${{ github.repository == 'rustacean-sh/rustacean-authorship-action' }}
+      run: |
+        chmod +x ./rustacean-authorship-action-ubuntu-latest
+        ./rustacean-authorship-action-ubuntu-latest \
+          --pr-number "${{ env.PR_NUMBER }}" \
+          --pr-author "${{ env.PR_AUTHOR }}" \
+          --github-token "${{ env.GH_TOKEN }}"
+
+    - id: run
+      shell: bash
       name: Run Action
+      if: ${{ github.repository != 'rustacean-sh/rustacean-authorship-action' }}
       run: |
         chmod +x ./rustacean-authorship-action-ubuntu-latest
         ./rustacean-authorship-action-ubuntu-latest \
           --pr-number "${{ github.event.number }}" \
-          --pr-author "${{ inputs.pr_author }}" \
+          --pr-author "${{ github.actor }}" \
           --github-token "${{ inputs.token }}"

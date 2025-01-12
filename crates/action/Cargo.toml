@@ -1,0 +1,13 @@
+[package]
+name = "rustacean-authorship-action"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+anyhow = { workspace = true }
+clap = { workspace = true, features = ["std", "derive", "env"] }
+reqwest = { workspace = true, features = ["json"] }
+serde = { workspace = true, features = ["derive"] }
+tokio = { workspace = true, features = ["full"] }
+url = { workspace = true }

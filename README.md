@@ -16,14 +16,31 @@ the authenticity of the Rustacean file.
 
 ## Development
 
+For convenience a _mock_ server is provided which is used to simulate the GitHub API.
+
+Run the following command to start the server:
+
+```bash
+cargo r --bin mock
+```
+
+> The server listens on port `3000` by default.
+
 Run the following command on development mode:
 
 ```bash
-cargo r -- \
+GITHUB_BASE_URL="http://localhost:3000/repos/rustacean-sh/rustacean.sh" \
+cargo r --bin rustacean-authorship-action -- \
 --pr-number <PR Number to Verify> \
 --pr-author <PR Author GitHub's Username> \
 --github-token <GitHub Token>
 ```
+
+> Static assets on the `mock` server are located at `./fixtures`, you can modify
+> them to test different scenarios. Default values are:
+> `--pr-number 22`
+> `--pr-author EstebanBorai`
+> `--github-token 1234`
 
 ## License
 
