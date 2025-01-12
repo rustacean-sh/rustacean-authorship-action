@@ -7,15 +7,28 @@ const PULL_REQUEST_FILES_API_RESPONSE: &str = include_str!("../fixtures/pulls-fi
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    println!("Started Mock Server...");
+
     let app = Router::new()
-        .route("/pulls/22", get(|| async { PULL_REQUEST_API_RESPONSE }))
         .route(
-            "/pulls/22/files",
-            get(|| async { PULL_REQUEST_FILES_API_RESPONSE }),
+            "/repos/rustacean-sh/rustacean.sh/pulls/22",
+            get(|| async {
+                println!("Got Request on /pulls/22");
+                PULL_REQUEST_API_RESPONSE
+            }),
+        )
+        .route(
+            "/repos/rustacean-sh/rustacean.sh/pulls/22/files",
+            get(|| async {
+                println!("Got Request on /pulls/22/files");
+                PULL_REQUEST_FILES_API_RESPONSE
+            }),
         );
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await?;
-    axum::serve(listener, app).await?;
 
+    println!("Serving Mock Server...");
+
+    axum::serve(listener, app).await?;
     Ok(())
 }

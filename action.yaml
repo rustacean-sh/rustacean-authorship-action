@@ -29,8 +29,7 @@ runs:
       run: |
         cp ./target/release/rustacean-authorship-action ./rustacean-authorship-action-ubuntu-latest
 
-    - id: run
-      shell: bash
+    - shell: bash
       name: (Test Only) Run Action with Special Envs
       if: ${{ github.repository == 'rustacean-sh/rustacean-authorship-action' }}
       run: |
@@ -40,8 +39,7 @@ runs:
           --pr-author "${{ env.PR_AUTHOR }}" \
           --github-token "${{ env.GH_TOKEN }}"
 
-    - id: run
-      shell: bash
+    - shell: bash
       name: Run Action
       if: ${{ github.repository != 'rustacean-sh/rustacean-authorship-action' }}
       run: |

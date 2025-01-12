@@ -54,7 +54,7 @@ jobs:
         run: cargo b --release --bin rustacean-authorship-action
 
       - name: Run Mock Server
-        run: cargo r --bin mock &
+        run: cargo r --bin mock > mock.log &
 
       - name: Wait for Mock Server
         run: wait-on http GET http://localhost:3000/repos/rustacean-sh/rustacean.sh/pulls/22
@@ -66,3 +66,7 @@ jobs:
           PR_NUMBER: 22
         with:
           token: "1234"
+
+      - name: Print Mock Server Logs
+        if: always()
+        run: cat mock.log

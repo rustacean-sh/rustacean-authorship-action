@@ -3,11 +3,9 @@ use reqwest::RequestBuilder;
 use serde::Deserialize;
 use url::Url;
 
-pub type PrNumber = i32;
+use super::GITHUB_BASE_URL;
 
-/// URL used to reach GitHub's API.
-/// E.g. "https://api.github.com/repos/rustacean-sh/rustacean.sh"
-const GITHUB_BASE_URL: &str = env!("GITHUB_BASE_URL");
+pub type PrNumber = i32;
 
 #[derive(Deserialize, Debug)]
 struct GitHubPrUser {
