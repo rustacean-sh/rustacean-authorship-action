@@ -28,4 +28,7 @@ runs:
       name: Run Action
       run: |
         chmod +x ./rustacean-authorship-action-ubuntu-latest
-        ./rustacean-authorship-action-ubuntu-latest "${{ inputs.pr_author }}"
+        ./rustacean-authorship-action-ubuntu-latest \
+          --pr-number "${{ github.event.number }}" \
+          --pr-author "${{ inputs.pr_author }}" \
+          --github-token "${{ inputs.token }}"
