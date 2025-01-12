@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  checks:
+  code-checks:
     name: Integrity Checks
     runs-on: ubuntu-latest
     steps:
@@ -30,3 +30,22 @@ jobs:
 
       - name: Test Check
         run: cargo t
+
+  action-checks:
+    name: Action Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build
+        run: cargo b --release
+
+      - name: Perform Test
+        uses: ./
+        with:
+          pr_author: ${{ github.actor }}
+          token: ${{ secrets.GITHUB_TOKEN }}

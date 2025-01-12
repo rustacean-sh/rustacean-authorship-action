@@ -6,6 +6,7 @@ inputs:
   pr_author:
     required: true
     description: PR Author
+
   token:
     required: true
     description: GitHub Token Used to interact with the GitHub API
@@ -15,13 +16,22 @@ runs:
   using: composite
   steps:
     - shell: bash
-      name: Download Action
+      name: Download Action from Releases
+      if: ${{ github.repository != 'rustacean-sh/rustacean-authorship-action' }}
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
       run: |
         gh release download \
           --repo rustacean-sh/rustacean-authorship-action \
           --pattern 'rustacean-authorship-action-ubuntu-latest'
+
+    - shell: bash
+      name: (Test Only) Use Action from Local Build
+      if: ${{ github.repository == 'rustacean-sh/rustacean-authorship-action' }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+      run: |
+        cp ./target/release/rustacean-authorship-action ./rustacean-authorship-action-ubuntu-latest
 
     - id: run
       shell: bash
