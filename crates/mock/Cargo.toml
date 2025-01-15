@@ -1,0 +1,10 @@
+[package]
+name = "mock"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+anyhow = { workspace = true }
+axum = { workspace = true }
+tokio = { workspace = true, features = ["full"] }

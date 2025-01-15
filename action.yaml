@@ -3,9 +3,6 @@ description: GitHub Action to Verify PR Authorship
 author: Esteban Borai <estebanborai@gmail.com> (https://estebanborai.com)
 
 inputs:
-  pr_author:
-    required: true
-    description: PR Author
   token:
     required: true
     description: GitHub Token Used to interact with the GitHub API
@@ -15,7 +12,8 @@ runs:
   using: composite
   steps:
     - shell: bash
-      name: Download Action
+      name: Download Action from Releases
+      if: ${{ github.repository != 'rustacean-sh/rustacean-authorship-action' }}
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
       run: |
@@ -23,9 +21,30 @@ runs:
           --repo rustacean-sh/rustacean-authorship-action \
           --pattern 'rustacean-authorship-action-ubuntu-latest'
 
-    - id: run
-      shell: bash
-      name: Run Action
+    - shell: bash
+      name: (Test Only) Use Action from Local Build
+      if: ${{ github.repository == 'rustacean-sh/rustacean-authorship-action' }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+      run: |
+        cp ./target/release/rustacean-authorship-action ./rustacean-authorship-action-ubuntu-latest
+
+    - shell: bash
+      name: (Test Only) Run Action with Special Envs
+      if: ${{ github.repository == 'rustacean-sh/rustacean-authorship-action' }}
       run: |
         chmod +x ./rustacean-authorship-action-ubuntu-latest
-        ./rustacean-authorship-action-ubuntu-latest "${{ inputs.pr_author }}"
+        ./rustacean-authorship-action-ubuntu-latest \
+          --pr-number "${{ env.PR_NUMBER }}" \
+          --pr-author "${{ env.PR_AUTHOR }}" \
+          --github-token "${{ env.GH_TOKEN }}"
+
+    - shell: bash
+      name: Run Action
+      if: ${{ github.repository != 'rustacean-sh/rustacean-authorship-action' }}
+      run: |
+        chmod +x ./rustacean-authorship-action-ubuntu-latest
+        ./rustacean-authorship-action-ubuntu-latest \
+          --pr-number "${{ github.event.number }}" \
+          --pr-author "${{ github.actor }}" \
+          --github-token "${{ inputs.token }}"

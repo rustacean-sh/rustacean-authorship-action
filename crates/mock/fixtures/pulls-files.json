@@ -1,0 +1,14 @@
+[
+  {
+    "sha": "f3eaa7e5cb145d4558aa9bbe2e349c709594f19c",
+    "filename": "data/rustaceans/EstebanBorai.toml",
+    "status": "added",
+    "additions": 16,
+    "deletions": 0,
+    "changes": 16,
+    "blob_url": "https://github.com/rustacean-sh/rustacean.sh/blob/4f8b88afb7c6988b5ca1e8f383bd9deec63a9e4e/data%2Frustaceans%2FEstebanBorai.toml",
+    "raw_url": "https://github.com/rustacean-sh/rustacean.sh/raw/4f8b88afb7c6988b5ca1e8f383bd9deec63a9e4e/data%2Frustaceans%2FEstebanBorai.toml",
+    "contents_url": "https://api.github.com/repos/rustacean-sh/rustacean.sh/contents/data%2Frustaceans%2FEstebanBorai.toml?ref=4f8b88afb7c6988b5ca1e8f383bd9deec63a9e4e",
+    "patch": "@@ -0,0 +1,16 @@\n+name = \"Esteban\"\n+gh_user = \"EstebanBorai\"\n+image = \"https://avatars.githubusercontent.com/u/34756077?v=4\"\n+\n+[[social_networks]]\n+\n+[social_networks.X]\n+username = \"EstebanBorai\"\n+\n+[[social_networks]]\n+\n+[social_networks.Custom]\n+url = \"https://estebanborai.com\"\n+\n+[location]\n+continent = \"SouthAmerica\""
+  }
+]

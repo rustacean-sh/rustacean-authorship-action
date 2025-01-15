@@ -1,0 +1,72 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  code-checks:
+    name: Integrity Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build Check
+        run: cargo b
+
+      - name: Format Check
+        run: cargo fmt -- --check
+
+      - name: Clippy Check
+        run: cargo clippy -- -D warnings
+
+      - name: Test Check
+        run: cargo t
+
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Setup Cargo Binstall
+        uses: cargo-bins/cargo-binstall@main
+
+      - name: Install Rust Binaries
+        run: |
+          cargo binstall -y --force wait-on
+
+      - name: Build
+        env:
+          GITHUB_BASE_URL: http://localhost:3000/repos/rustacean-sh/rustacean.sh
+        run: cargo b --release --bin rustacean-authorship-action
+
+      - name: Run Mock Server
+        run: cargo r --bin mock > mock.log &
+
+      - name: Wait for Mock Server
+        run: wait-on http GET http://localhost:3000/repos/rustacean-sh/rustacean.sh/pulls/22
+
+      - name: Perform Test
+        uses: ./
+        env:
+          PR_AUTHOR: "EstebanBorai"
+          PR_NUMBER: 22
+        with:
+          token: "1234"
+
+      - name: Print Mock Server Logs
+        if: always()
+        run: cat mock.log
